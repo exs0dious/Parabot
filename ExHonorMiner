@@ -1,0 +1,249 @@
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+
+import org.parabot.environment.api.interfaces.Paintable;
+import org.parabot.environment.api.utils.Time;
+import org.parabot.environment.input.Mouse;
+import org.parabot.environment.scripts.Script;
+import org.parabot.environment.scripts.ScriptManifest;
+import org.parabot.environment.scripts.framework.Strategy;
+import org.parabot.environment.scripts.Category;
+import org.rev317.min.api.methods.Inventory;
+import org.rev317.min.api.methods.Menu;
+import org.rev317.min.api.methods.Players;
+import org.rev317.min.api.methods.SceneObjects;
+import org.rev317.min.api.methods.Skill;
+import org.rev317.min.api.wrappers.SceneObject;
+import org.rev317.min.api.events.MessageEvent;
+
+
+
+
+
+
+
+
+
+@ScriptManifest(author = "Exs0dious",
+category = Category.MINING,
+description = "ExHonorMiner, start in skiller area to mine copper through addy",
+name = "ExHonorMiner",
+servers = { "PkHonor" },
+version = 2.6)
+
+public class ExHonorMiner extends Script implements Paintable {
+	
+	int gems;
+	int pkhp;
+	
+	
+    private final ArrayList<Strategy> strategies = new ArrayList<Strategy>();
+	
+	public long startTime;
+    int startingXp = 0;
+   
+    public boolean onExecute() {
+        startTime = System.currentTimeMillis();
+        startingXp = Skill.MINING.getExperience();
+        strategies.add(new Mine());
+        strategies.add(new toBank());
+        provide(strategies);
+        return true;
+    }
+    
+    public int getHourlyRate(int variable)
+    {
+         return (int)(((double)(variable - 0) * 3600000D) / (double)(System.currentTimeMillis() - startTime));
+    }
+  
+    
+    public void paint(Graphics g) {
+               
+             int XPGAINED = Skill.getCurrentExperience(Skill.MINING.getIndex()) - startingXp;
+             
+        g.setColor(Color.blue);
+        g.setFont(new Font("Verdana", Font.BOLD, 25));
+        g.drawString("ExHonorminer", 4, 250);
+               
+        g.setColor(Color.green);
+        g.setFont(new Font("Verdana", Font.PLAIN, 10));
+        
+        g.drawString("Mouse: "+ Mouse.getInstance().getPoint(), 4, 260);
+        g.drawString("Gems Obtained: "+gems, 4, 270);
+        g.drawString("PkH points Obtained: "+pkhp, 4, 280);
+        g.drawString("Runtime: "+runTime(startTime), 4, 290);
+        g.drawString((new StringBuilder("Xp Gained(p/h): ")).append(XPGAINED).append(" (").append(getHourlyRate(XPGAINED)).append(")").toString(), 4, 300);
+       
+ 
+         
+        }
+    public String runTime(long i) {
+        DecimalFormat nf = new DecimalFormat("00");
+        long millis = System.currentTimeMillis() - i;
+        long hours = millis / (1000 * 60 * 60);
+        millis -= hours * (1000 * 60 * 60);
+        long minutes = millis / (1000 * 60);
+        millis -= minutes * (1000 * 60);
+        long seconds = millis / 1000;
+        return nf.format(hours) + ":" + nf.format(minutes) + ":" + nf.format(seconds);
+        }
+    
+    public class Mine implements Strategy {
+        int Rock;
+       @Override
+       public boolean activate() {
+           return !Inventory.isFull();
+       }
+ 
+       @Override
+       public void execute() {
+        if(Skill.MINING.getRealLevel() < 15){
+                   Rock = 2091;
+                SceneObject rock = SceneObjects.getClosest(Rock);
+         
+            if(rock != null) {
+                if(Players.getMyPlayer().getAnimation() == -1){
+                        if(!Inventory.isFull()){
+                        	rock.interact(0);
+            Time.sleep(1500);
+                }
+                }  
+    }
+        }
+        
+        
+        if(Skill.MINING.getRealLevel() < 30){
+            Rock = 2092;
+         SceneObject rock = SceneObjects.getClosest(Rock);
+  
+     if(rock != null) {
+         if(Players.getMyPlayer().getAnimation() == -1){
+                 if(!Inventory.isFull()){
+                	 rock.interact(0);
+     Time.sleep(1500);
+         }
+         }  
+}
+ }
+        
+       if(Skill.MINING.getRealLevel() < 55){
+            Rock = 2098;
+         SceneObject rock = SceneObjects.getClosest(Rock);
+  
+     if(rock != null) {
+         if(Players.getMyPlayer().getAnimation() == -1){
+                 if(!Inventory.isFull()){
+                	 rock.interact(0);
+     Time.sleep(1500);
+         }
+         }  
+}
+ }
+        
+        if(Skill.MINING.getRealLevel() < 70){
+            Rock = 2103;
+         SceneObject rock = SceneObjects.getClosest(Rock);
+  
+     if(rock != null) {
+         if(Players.getMyPlayer().getAnimation() == -1){
+                 if(!Inventory.isFull()){
+     rock.interact(0);
+     Time.sleep(1500);
+         }
+         }  
+     }
+        }
+     if(Skill.MINING.getRealLevel() <= 85){
+         Rock = 2105;
+      SceneObject rock = SceneObjects.getClosest(Rock);
+
+  if(rock != null) {
+      if(Players.getMyPlayer().getAnimation() == -1){
+              if(!Inventory.isFull()){
+  rock.interact(0);
+  Time.sleep(1500);
+      }
+      }  
+  }
+     }
+        }
+ }
+    
+         
+        public void hometele(){
+
+            Point MAGIC_INTERFACE = new Point(740, 185);
+            Point HOME_TELE = new Point (570, 240);
+            Mouse.getInstance().click(MAGIC_INTERFACE);
+            Time.sleep(400);
+            Mouse.getInstance().click(HOME_TELE);
+        }
+    
+ 
+    public void skilltele(){
+    	
+    	Point MAGIC_INTERFACE = new Point(740, 185);
+    	Point SKILL_TELE = new Point(715, 285);
+    	Point Skill_TELE_Int = new Point(260, 416); 
+    	Mouse.getInstance().click(MAGIC_INTERFACE);
+    	Time.sleep(400);
+    	Mouse.getInstance().click(SKILL_TELE);
+    	Time.sleep(400);
+    	Mouse.getInstance().click(Skill_TELE_Int);
+    	Time.sleep(400);
+    }
+      public void closebank(){
+    	  Point BankX = new Point(487, 27);
+    	  Mouse.getInstance().click(BankX);
+    	  Time.sleep(400);
+	  
+      }
+      
+    	  public void messageReceived(MessageEvent m) {
+    	        // TODO Auto-generated method stub
+    	       
+    	        if (m.getMessage().contains("You received 1 PkHonor point, you now")) {
+    	        pkhp += 1;
+    	        } else {
+    	        if (m.getMessage().contains("You found an Uncut")) {
+    	            gems += 1;
+       
+              }
+              }
+      }
+
+                             
+    
+	public class toBank implements Strategy {
+                   
+    
+
+        public boolean activate() {
+            return Inventory.isFull();
+        }
+  
+        public void execute() {
+        	hometele();
+        	Time.sleep(2000);
+        	SceneObject bank = SceneObjects.getClosest(2213);
+            if(bank != null) {
+                if(Players.getMyPlayer().getAnimation() == -1){
+                        if(Inventory.isFull()){
+            bank.interact(0);
+            Time.sleep(4000);
+            Menu.sendAction(646 , 447 , 13 , 23412);
+            Time.sleep(3000);
+            closebank();
+            Time.sleep(3000);
+            skilltele();
+                        }
+        }
+            }
+            }
+
+}
+}
